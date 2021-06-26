@@ -42,7 +42,7 @@ import {
 } from "./style";
 
 class CometChatMessageList extends React.PureComponent {
-
+  
   loggedInUser = null;
   lastScrollTop = 0;
   times = 0;
@@ -655,10 +655,10 @@ class CometChatMessageList extends React.PureComponent {
           component = <CometChatSenderStickerBubble loggedInUser={this.loggedInUser} key={key} message={message} {...this.props} />;
           break;
         case enums.CUSTOM_TYPE_DOCUMENT:
-          component = <CometChatSenderDocumentBubble loggedInUser={this.loggedInUser} key={key} message={message} {...this.props} />;
+          component = <CometChatSenderDocumentBubble setLeft={this.props.setLeft} loggedInUser={this.loggedInUser} key={key} message={message} {...this.props} />;
           break; 
         case enums.CUSTOM_TYPE_WHITEBOARD:
-          component = <CometChatSenderWhiteboardBubble loggedInUser={this.loggedInUser} key={key} message={message} {...this.props} />;
+          component = <CometChatSenderWhiteboardBubble setLeft={this.props.setLeft} loggedInUser={this.loggedInUser} key={key} message={message} {...this.props} />;
           break; 
         case enums.CUSTOM_TYPE_MEETING:
           component = <CometChatSenderDirectCallBubble loggedInUser={this.loggedInUser} key={key} message={message} {...this.props} />;
@@ -686,10 +686,10 @@ class CometChatMessageList extends React.PureComponent {
           component = <CometChatReceiverStickerMessageBubble loggedInUser={this.loggedInUser} key={key} message={message} {...this.props} />;
           break;
         case enums.CUSTOM_TYPE_DOCUMENT:
-          component = <CometChatReceiverDocumentBubble loggedInUser={this.loggedInUser} key={key} message={message} {...this.props} />;
+          component = <CometChatReceiverDocumentBubble setLeft={this.props.setLeft} loggedInUser={this.loggedInUser} key={key} message={message} {...this.props} />;
           break;
         case enums.CUSTOM_TYPE_WHITEBOARD:
-          component = <CometChatReceiverWhiteboardBubble loggedInUser={this.loggedInUser} key={key} message={message} {...this.props} />;
+          component = <CometChatReceiverWhiteboardBubble setLeft={this.props.setLeft} loggedInUser={this.loggedInUser} key={key} message={message} {...this.props} />;
           break;
         case enums.CUSTOM_TYPE_MEETING:
           component = <CometChatReceiverDirectCallBubble loggedInUser={this.loggedInUser} key={key} message={message} {...this.props} />;

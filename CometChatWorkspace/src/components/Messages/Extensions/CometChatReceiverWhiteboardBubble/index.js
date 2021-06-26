@@ -70,7 +70,8 @@ class ReceiverWhiteboardBubble extends React.PureComponent {
             let username = this.props.loggedInUser.name.split(' ').join('_');
             // Appending the username to the board_url
             whiteboardUrl = whiteboardData.board_url + '&username=' + username;
-            window.open(whiteboardUrl, '', 'fullscreen=yes, scrollbars=auto');
+            this.props.setLeft({label:'whiteboard',url: whiteboardUrl})
+            // window.open(whiteboardUrl, '', 'fullscreen=yes, scrollbars=auto');
         }
     }
 

@@ -75,7 +75,6 @@ class CometChatMessages extends React.PureComponent {
   }
 
   componentDidMount() {
-
     this.type = this.getContext().type;
     this.item = this.getContext().item;
     SoundManager.setWidgetSettings(this.props.widgetsettings);
@@ -88,14 +87,15 @@ class CometChatMessages extends React.PureComponent {
       const ifChatWindowChanged = () => {
 
         let output = false;
+        //COMMENTING OUT AS CHAT WINDOW WILL NEVER CHANGE. USERS WILL ONLY HAVE 1 CHAT -KYLE
 
-        if (this.context.type === CometChat.ACTION_TYPE.TYPE_USER && this.context.item.uid !== this.item.uid) {
-          output = true;
-        } else if (this.context.type === CometChat.ACTION_TYPE.TYPE_GROUP && this.context.item.guid !== this.item.guid) {
-          output = true;
-        } else if (this.type !== this.context.type) {
-          output = true;
-        }
+        // if (this.context.type === CometChat.ACTION_TYPE.TYPE_USER && this.context.item.uid !== this.item.uid) {
+        //   output = true;
+        // } else if (this.context.type === CometChat.ACTION_TYPE.TYPE_GROUP && this.context.item.guid !== this.item.guid) {
+        //   output = true;
+        // } else if (this.type !== this.context.type) {
+        //   output = true;
+        // }
 
         return output;
       }
@@ -912,19 +912,19 @@ class CometChatMessages extends React.PureComponent {
     if (Object.keys(this.props.widgetsettings).length === 0) {
 
       outgoingCallView = (
-        <CometChatOutgoingCall
-        ref={el => this.outgoingCallRef = el}
-        theme={this.props.theme}
-        lang={this.state.lang}
-        actionGenerated={this.actionHandler} />
+          <CometChatOutgoingCall
+          ref={el => this.outgoingCallRef = el}
+          theme={this.props.theme}
+          lang={this.state.lang}
+          actionGenerated={this.actionHandler} />
       );
 
       outgoingDirectCallView = (
-        <CometChatOutgoingDirectCall
-        ref={el => this.outgoingDirectCallRef = el}
-        theme={this.props.theme}
-        lang={this.state.lang}
-        actionGenerated={this.actionHandler} />
+          <CometChatOutgoingDirectCall
+          ref={el => this.outgoingDirectCallRef = el}
+          theme={this.props.theme}
+          lang={this.state.lang}
+          actionGenerated={this.actionHandler} />
       );
     }
 
@@ -1003,7 +1003,9 @@ class CometChatMessages extends React.PureComponent {
             messageconfig={this.props.messageconfig}
             widgetsettings={this.props.widgetsettings}
             widgetconfig={this.props.widgetconfig}
-            actionGenerated={this.actionHandler} />
+            actionGenerated={this.actionHandler} 
+            setLeft={this.props.setLeft} 
+            />
           {liveReactionView}
           {messageComposer}
           {newMessageIndicator}

@@ -153,14 +153,14 @@ class CometChatUI extends React.Component {
         <CometChatMessages 
         theme={this.props.theme}
         lang={this.state.lang}
-        _parent="unified"
+        _parent="standalone"
         actionGenerated={this.actionHandler} />
       );
 
     return (
       <CometChatContextProvider ref={el => this.contextProviderRef = el} user={this.props.chatWithUser} group={this.props.chatWithGroup}>
         <div css={unifiedStyle(this.props)} className="cometchat cometchat--unified" dir={Translator.getDirection(this.state.lang)}>
-          <div css={unifiedSidebarStyle(this.state, this.props)} className="unified__sidebar">
+          {/* <div css={unifiedSidebarStyle(this.state, this.props)} className="unified__sidebar">
             <CometChatNavBar
               ref={el => this.navBarRef = el}
               theme={this.props.theme}
@@ -169,7 +169,7 @@ class CometChatUI extends React.Component {
               tabs={this.tabs}
               unreadMessages={this.state.unreadMessages}
               actionGenerated={this.navBarAction} />
-          </div>
+          </div> */}
           <div css={unifiedMainStyle(this.state, this.props)} className="unified__main">
             {messageScreen}
           </div>

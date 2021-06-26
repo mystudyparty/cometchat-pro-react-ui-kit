@@ -18,6 +18,8 @@ import { SoundManager } from "../../../util/SoundManager";
 import { theme } from "../../../resources/theme";
 import Translator from "../../../resources/localization/translator";
 
+import { backendUrl } from '../../../../../config'
+
 import {
   chatComposerStyle,
   editPreviewContainerStyle,
@@ -40,6 +42,7 @@ import {
   stickerBtnStyle
 } from "./style";
 
+import clip from './resources/clip.png';
 import roundedPlus from "./resources/attach.png";
 import videoIcon from "./resources/attachvideo.png";
 import audioIcon from "./resources/attachaudio.png";
@@ -245,11 +248,11 @@ class CometChatMessageComposer extends React.PureComponent {
     this.setState({"messageInput": elem.innerText, "messageType": "text"});
   }
 
-  toggleFilePicker = () => {
+  // toggleFilePicker = () => {
 
-    const currentState = !this.state.showFilePicker;
-    this.setState({ showFilePicker: currentState });
-  }
+  //   const currentState = !this.state.showFilePicker;
+  //   this.setState({ showFilePicker: currentState });
+  // }
 
   openFileDialogue = (fileType) => {
 
@@ -271,24 +274,24 @@ class CometChatMessageComposer extends React.PureComponent {
     }
   }
 
-  onImageChange = (e) => {; 
+  // onImageChange = (e) => {; 
 
-    if (!this.imageUploaderRef.current.files["0"]) {
-      return false;
-    }
+  //   if (!this.imageUploaderRef.current.files["0"]) {
+  //     return false;
+  //   }
 
-    const uploadedFile = this.imageUploaderRef.current.files["0"];
+  //   const uploadedFile = this.imageUploaderRef.current.files["0"];
 
-    var reader = new FileReader(); // Creating reader instance from FileReader() API
-    reader.addEventListener("load", (event) => { // Setting up base64 URL on image
+  //   var reader = new FileReader(); // Creating reader instance from FileReader() API
+  //   reader.addEventListener("load", (event) => { // Setting up base64 URL on image
 
-      const newFile = new File([reader.result], uploadedFile.name, uploadedFile);
-      this.sendMediaMessage(newFile, CometChat.MESSAGE_TYPE.IMAGE);
+  //     const newFile = new File([reader.result], uploadedFile.name, uploadedFile);
+  //     this.sendMediaMessage(newFile, CometChat.MESSAGE_TYPE.IMAGE);
 
-    }, false);
+  //   }, false);
 
-    reader.readAsArrayBuffer(uploadedFile)  
-  }
+  //   reader.readAsArrayBuffer(uploadedFile)  
+  // }
 
   onFileChange = (e) => {
 
@@ -302,50 +305,66 @@ class CometChatMessageComposer extends React.PureComponent {
     reader.addEventListener("load", (event) => { // Setting up base64 URL on image
 
       const newFile = new File([reader.result], uploadedFile.name, uploadedFile);
-      this.sendMediaMessage(newFile, CometChat.MESSAGE_TYPE.FILE);
+      const type = newFile.type.split('/')[0]
+      let ccMessageType;
+      switch(type){
+        case 'image':
+          ccMessageType = CometChat.MESSAGE_TYPE.IMAGE
+          break;
+        case 'video':
+          ccMessageType = CometChat.MESSAGE_TYPE.VIDEO
+          break;
+        case 'audio':
+          ccMessageType = CometChat.MESSAGE_TYPE.AUDIO
+          break;
+        default:
+          ccMessageType = CometChat.MESSAGE_TYPE.FILE
+          break;
+      }
+      this.sendMediaMessage(newFile, ccMessageType);
 
     }, false);
 
     reader.readAsArrayBuffer(uploadedFile); 
   }
 
-  onAudioChange = (e) => {
+  // onAudioChange = (e) => {
 
-    if (!this.audioUploaderRef.current.files["0"]) {
-      return false;
-    }
+  //   if (!this.audioUploaderRef.current.files["0"]) {
+  //     return false;
+  //   }
 
-    const uploadedFile = this.audioUploaderRef.current.files["0"];
+  //   const uploadedFile = this.audioUploaderRef.current.files["0"];
 
-    var reader = new FileReader(); // Creating reader instance from FileReader() API
-    reader.addEventListener("load", () => { // Setting up base64 URL on image
+  //   var reader = new FileReader(); // Creating reader instance from FileReader() API
+  //   reader.addEventListener("load", () => { // Setting up base64 URL on image
 
-      const newFile = new File([reader.result], uploadedFile.name, uploadedFile);
-      this.sendMediaMessage(newFile, CometChat.MESSAGE_TYPE.AUDIO);
+  //     const newFile = new File([reader.result], uploadedFile.name, uploadedFile);
+  //     this.sendMediaMessage(newFile, CometChat.MESSAGE_TYPE.AUDIO);
 
-    }, false);
+  //   }, false);
 
-    reader.readAsArrayBuffer(uploadedFile); 
-  }
+  //   reader.readAsArrayBuffer(uploadedFile); 
+  // }
 
-  onVideoChange = (e) => {
+  // onVideoChange = (e) => {
  
-    if (!this.videoUploaderRef.current.files["0"]) {
-      return false;
-    }
+  //   if (!this.videoUploaderRef.current.files["0"]) {
+  //     return false;
+  //   }
 
-    const uploadedFile = this.videoUploaderRef.current.files["0"];
+  //   const uploadedFile = this.videoUploaderRef.current.files["0"];
 
-    var reader = new FileReader(); // Creating reader instance from FileReader() API
-    reader.addEventListener("load", () => { // Setting up base64 URL on image
+  //   var reader = new FileReader(); // Creating reader instance from FileReader() API
+  //   reader.addEventListener("load", () => { // Setting up base64 URL on image
 
-      const newFile = new File([reader.result], uploadedFile.name, uploadedFile);
-      this.sendMediaMessage(newFile, CometChat.MESSAGE_TYPE.VIDEO);
+  //     const newFile = new File([reader.result], uploadedFile.name, uploadedFile);
+  //     this.sendMediaMessage(newFile, CometChat.MESSAGE_TYPE.VIDEO);
 
-    }, false);
+  //   }, false);
 
-    reader.readAsArrayBuffer(uploadedFile);  
-  }
+  //   reader.readAsArrayBuffer(uploadedFile);  
+  // }
 
   getReceiverDetails = () => {
 
@@ -384,7 +403,7 @@ class CometChatMessageComposer extends React.PureComponent {
 
   sendMediaMessage = (messageInput, messageType) => {
 
-    this.toggleFilePicker();
+    // this.toggleFilePicker();
     this.endTyping(null, null);
     
     const { receiverId, receiverType } = this.getReceiverDetails();
@@ -407,6 +426,13 @@ class CometChatMessageComposer extends React.PureComponent {
     });
     mediaMessage._composedAt = getUnixTimestamp();
     mediaMessage._id = ID();
+
+    this.sendGroupResourceToDb({
+      _id:mediaMessage._id,
+      type: messageType,
+      url: messageInput["name"],
+      group:this.context.item.guid
+    })
 
     SoundManager.play(enums.CONSTANTS.AUDIO["OUTGOING_MESSAGE"]);
     this.props.actionGenerated(enums.ACTIONS["MESSAGE_COMPOSED"], [mediaMessage]);
@@ -435,6 +461,23 @@ class CometChatMessageComposer extends React.PureComponent {
       this.sendTextMessage();
       return true;
     }
+  }
+
+  checkForLink = (message) => {
+    const regex = new RegExp("([a-zA-Z0-9]+://)?([a-zA-Z0-9_]+:[a-zA-Z0-9_]+@)?([a-zA-Z0-9.-]+\\.[A-Za-z]{2,4})(:[0-9]+)?(/.*)?");
+    return message.match(regex);
+  }
+  
+  sendGroupResourceToDb = (obj) => {
+    fetch(`${backendUrl}/api/resource`,{
+      method:'POST',
+      body:JSON.stringify(obj),
+      headers:{
+        'content-type':'application/json',
+        'accept':'application/json',
+        Authorization:`Bearer ${localStorage.token}`
+      }
+    })
   }
 
   sendTextMessage = () => {
@@ -469,6 +512,16 @@ class CometChatMessageComposer extends React.PureComponent {
     textMessage.setConversationId(conversationId);
     textMessage._composedAt = getUnixTimestamp();
     textMessage._id = ID();
+
+    const hasLink = this.checkForLink(messageInput)
+    if(hasLink){
+      this.sendGroupResourceToDb({
+        _id:textMessage._id,
+        type:'link',
+        url:hasLink[0],
+        group: this.context.item.guid
+      })
+    }
 
     this.props.actionGenerated(enums.ACTIONS["MESSAGE_COMPOSED"], [textMessage]);
     this.setState({ messageInput: "", replyPreview: false });
@@ -608,7 +661,7 @@ class CometChatMessageComposer extends React.PureComponent {
   toggleCollaborativeDocument = () => {
 
     const { receiverId, receiverType } = this.getReceiverDetails();
-    
+
     CometChat.callExtension("document", "POST", "v1/create", {
       "receiver": receiverId,
       "receiverType": receiverType
@@ -616,6 +669,11 @@ class CometChatMessageComposer extends React.PureComponent {
 
       // Response with document url
       if (response && response.hasOwnProperty("document_url")) {
+        this.sendGroupResourceToDb({
+          type:'note',
+          url:response.document_url,
+          group: this.context.item.guid
+        })
         this.context.setToastMessage("success", "DOCUMENT_SUCCESS");
       } else {
         this.context.setToastMessage("error", "DOCUMENT_FAIL");
@@ -647,6 +705,12 @@ class CometChatMessageComposer extends React.PureComponent {
     }).then(response => {
       // Response with board_url
       if (response && response.hasOwnProperty("board_url")) {
+        console.log(response)
+        this.sendGroupResourceToDb({
+          type:'whiteboard',
+          url:response.board_url,
+          group: this.context.item.guid
+        })
         this.context.setToastMessage("success", "WHITEBOARD_SUCCESS");
       } else {
         this.context.setToastMessage("error", "WHITEBOARD_FAIL");
@@ -671,7 +735,7 @@ class CometChatMessageComposer extends React.PureComponent {
   closeCreatePoll = () => {
 
     this.toggleCreatePoll();
-    this.toggleFilePicker();
+    // this.toggleFilePicker();
   }
 
   actionHandler = (action, message) => {
@@ -680,7 +744,7 @@ class CometChatMessageComposer extends React.PureComponent {
       
       case enums.ACTIONS["POLL_CREATED"]:
         this.toggleCreatePoll();
-        this.toggleFilePicker();
+        // this.toggleFilePicker();
       break;
       case "sendSticker":
         this.sendSticker(message);
@@ -847,7 +911,7 @@ class CometChatMessageComposer extends React.PureComponent {
       css={fileItemStyle()} 
       className="filelist__item item__file" 
       onClick={() => { this.openFileDialogue("file") }}>
-        <img src={docIcon} alt={docText} />
+        <img src={clip} alt={docText} style={{width:'.8em'}}/>
         <input onChange={this.onFileChange} type="file" id="file" ref={this.fileUploaderRef} />
       </div>
     );
@@ -982,10 +1046,11 @@ class CometChatMessageComposer extends React.PureComponent {
     const attachText = Translator.translate("ATTACH", this.props.lang);
     let attach = (
       <div css={stickyAttachmentStyle()} className="input__sticky__attachment">
-        <div css={stickyAttachButtonStyle()} className="attachment__icon" onClick={this.toggleFilePicker} title={attachText}>
-          <img src={roundedPlus} alt={attachText} />
-        </div>
-        <div css={filePickerStyle(this.state)} className="attachment__filepicker" dir={Translator.getDirection(this.props.lang)}>
+        {docs}
+        {/* <div css={stickyAttachButtonStyle()} className="attachment__icon" onClick={this.toggleFilePicker} title={attachText}>
+          <img src={clip} alt={attachText} style={{width:".8em"}}/>
+        </div> 
+         <div css={filePickerStyle(this.state)} className="attachment__filepicker" dir={Translator.getDirection(this.props.lang)}>
           <div css={fileListStyle()} className="filepicker__filelist">
             {avp}
             {docs}
@@ -993,7 +1058,7 @@ class CometChatMessageComposer extends React.PureComponent {
             {collaborativeDocBtn}
             {collaborativeBoardBtn}
           </div>
-        </div>
+        </div> */}
       </div>
     );
 

@@ -28,7 +28,7 @@ import fileIcon from "./resources/file.png";
 
 class CometChatSharedMediaView extends React.Component {
 
-    static contextType = CometChatContext;
+    // static contextType = CometChatContext;
 
     constructor(props) {
         super(props);
@@ -36,6 +36,11 @@ class CometChatSharedMediaView extends React.Component {
         this.state = {
             messagetype: "image",
             messageList: []
+        }
+
+        this.context = {
+            item:{guid:props.group},
+            type:'group'
         }
 
         this.messageContainer = React.createRef();

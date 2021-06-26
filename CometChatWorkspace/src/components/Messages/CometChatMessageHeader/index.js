@@ -362,7 +362,7 @@ class CometChatMessageHeader extends React.Component {
     return (
       <div css={chatHeaderStyle(this.props)} className="chat__header">
         <div css={chatDetailStyle()} className="chat__details">
-          <div css={chatSideBarBtnStyle(menuIcon, this.props)} className="chat__sidebar-menu" onClick={this.resetChat}></div>
+          {/* <div css={chatSideBarBtnStyle(menuIcon, this.props)} className="chat__sidebar-menu" onClick={this.resetChat}></div> */}
           <div css={chatThumbnailStyle()} className="chat__thumbnail">
             {avatar}
             {presence}

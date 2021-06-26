@@ -80,6 +80,7 @@ class CometChatReceiverDocumentBubble extends React.PureComponent {
         && documentData.document_url.length) {
 
             documentUrl = documentData.document_url;
+            // this.props.setLeft({label:'document',url: documentUrl})
             window.open(documentUrl, '', 'fullscreen=yes, scrollbars=auto');
         }
     }
