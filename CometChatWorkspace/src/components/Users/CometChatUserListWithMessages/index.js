@@ -3,7 +3,6 @@ import React from "react";
 /** @jsx jsx */
 import { jsx } from "@emotion/core";
 import PropTypes from "prop-types";
-import { CometChat } from "@cometchat-pro/chat";
 
 import { CometChatUserList } from "../";
 import { CometChatMessages } from "../../Messages";
@@ -16,111 +15,98 @@ import { theme } from "../../../resources/theme";
 import Translator from "../../../resources/localization/translator";
 
 import {
-  userScreenStyle,
-  userScreenSidebarStyle,
-  userScreenMainStyle,
+	userScreenStyle,
+	userScreenSidebarStyle,
+	userScreenMainStyle,
 } from "./style"
 
 class CometChatUserListWithMessages extends React.Component {
 
-  loggedInUser = null;
+  	loggedInUser = null;
 
-  constructor(props) {
+  	constructor(props) {
 
 		super(props);
 
-    this.state = {
-      tab: "contacts",
-      sidebarview: false,
-      lang: props.lang,
-    }
+		this.state = {
+			sidebarview: false,
+			lang: props.lang,
+		}
 
-    this.contextProviderRef = React.createRef();
-
-    CometChat.getLoggedinUser().then(user => this.loggedInUser = user).catch(error => {
-      console.error(error);
-    });
-  }
+		this.contextProviderRef = React.createRef();
+  	}
   
-  componentDidMount() {
+	componentDidMount() {
 
-    if (this.props.chatWithUser.length === 0) {
-      this.toggleSideBar();
-    }
-  }
+		if (this.props.chatWithUser.length === 0) {
+			this.toggleSideBar();
+		}
+	}
 
-  componentDidUpdate(prevProps) {
+	componentDidUpdate(prevProps) {
 
-    if (prevProps.lang !== this.props.lang) {
-      this.setState({ lang: this.props.lang });
-    }
-  }
+		if (prevProps.lang !== this.props.lang) {
+			this.setState({ lang: this.props.lang });
+		}
+	}
 
-  itemClicked = (user, type) => {
+	itemClicked = (user, type) => {
 
-    this.contextProviderRef.setTypeAndItem(type, user);
-    this.toggleSideBar()
-  }
+		this.contextProviderRef.setTypeAndItem(type, user);
+		this.toggleSideBar()
+	}
 
-  actionHandler = (action) => {
-    
-    switch(action) {
-      case enums.ACTIONS["TOGGLE_SIDEBAR"]:
-        this.toggleSideBar();
-      break;
-      default:
-      break;
-    }
-  }
+	actionHandler = (action) => {
+		
+		switch(action) {
+			case enums.ACTIONS["TOGGLE_SIDEBAR"]:
+				this.toggleSideBar();
+			break;
+			default:
+			break;
+		}
+	}
 
-  toggleSideBar = () => {
+	toggleSideBar = () => {
 
-    const sidebarview = this.state.sidebarview;
-    this.setState({ sidebarview: !sidebarview });
-  }
+		const sidebarview = this.state.sidebarview;
+		this.setState({ sidebarview: !sidebarview });
+	}
 
-  render() {
+	render() {
 
-    let messageScreen = (
-    <CometChatMessages
-    theme={this.props.theme}
-    lang={this.state.lang}
-    _parent="userscreen"
-    actionGenerated={this.actionHandler} />);
+		let messageScreen = (
+		<CometChatMessages
+		_parent="userscreen"
+		actionGenerated={this.actionHandler} />);
 
-    return (
-      <CometChatContextProvider ref={el => this.contextProviderRef = el} user={this.props.chatWithUser}>
-        <div css={userScreenStyle(this.props)} className="cometchat cometchat--contacts" dir={Translator.getDirection(this.state.lang)}>
-          <div css={userScreenSidebarStyle(this.state, this.props)} className="contacts__sidebar">
-            <CometChatUserList
-            _parent="ulwm"
-            theme={this.props.theme}
-            lang={this.state.lang}
-            onItemClick={this.itemClicked}
-            actionGenerated={this.actionHandler} />
-          </div>
-          <div css={userScreenMainStyle(this.state, this.props)} className="contacts__main">{messageScreen}</div>
-          <CometChatIncomingCall
-          theme={this.props.theme}
-          lang={this.state.lang}
-          actionGenerated={this.actionHandler} />
-        </div>
-      </CometChatContextProvider>
-    );
-  }
+		return (
+			<CometChatContextProvider ref={el => (this.contextProviderRef = el)} user={this.props.chatWithUser}>
+				<div css={userScreenStyle(this.props)} className="cometchat cometchat--contacts" dir={Translator.getDirection(this.state.lang)}>
+					<div css={userScreenSidebarStyle(this.state, this.props)} className="contacts__sidebar">
+						<CometChatUserList _parent="ulwm" theme={this.props.theme} lang={this.state.lang} onItemClick={this.itemClicked} actionGenerated={this.actionHandler} />
+					</div>
+					<div css={userScreenMainStyle(this.state, this.props)} className="contacts__main">
+						{messageScreen}
+					</div>
+					<CometChatIncomingCall theme={this.props.theme} lang={this.state.lang} actionGenerated={this.actionHandler} />
+				</div>
+			</CometChatContextProvider>
+		);
+	}
 }
 
 // Specifies the default values for props:
 CometChatUserListWithMessages.defaultProps = {
-  lang: Translator.getDefaultLanguage(),
-  theme: theme,
-  chatWithUser: "",
+	lang: Translator.getDefaultLanguage(),
+	theme: theme,
+	chatWithUser: "",
 };
 
 CometChatUserListWithMessages.propTypes = {
-  lang: PropTypes.string,
-  theme: PropTypes.object,
-  chatWithUser: PropTypes.string,
+	lang: PropTypes.string,
+	theme: PropTypes.object,
+	chatWithUser: PropTypes.string,
 }
 
-export default CometChatUserListWithMessages;
+export { CometChatUserListWithMessages };

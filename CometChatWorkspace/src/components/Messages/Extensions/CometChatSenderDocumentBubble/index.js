@@ -144,4 +144,4 @@ CometChatSenderDocumentBubble.propTypes = {
     theme: PropTypes.object
 }
 
-export default CometChatSenderDocumentBubble;
+export { CometChatSenderDocumentBubble };

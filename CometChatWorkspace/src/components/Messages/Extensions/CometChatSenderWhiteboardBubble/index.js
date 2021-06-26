@@ -146,4 +146,4 @@ CometChatSenderWhiteboardBubble.propTypes = {
     theme: PropTypes.object
 }
 
-export default CometChatSenderWhiteboardBubble;
+export { CometChatSenderWhiteboardBubble };

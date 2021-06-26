@@ -10,7 +10,7 @@ export const incomingCallWrapperStyle = (props, keyframes) => {
     let rightPos = "0";
     let topPos = "0";
     let bottomPos = "unset";
-    let zIndexValue = "999";
+    let zIndexValue = "998";
 
     if (props.hasOwnProperty("widgetsettings")) {
 
@@ -80,6 +80,8 @@ export const incomingCallWrapperStyle = (props, keyframes) => {
                 leftPos = "unset";
                 positionValue = "fixed";
             }
+        } else {
+            zIndexValue = "2147483000";
         }
     }
 
@@ -90,7 +92,7 @@ export const incomingCallWrapperStyle = (props, keyframes) => {
         bottom: bottomPos,
         right: rightPos,
         borderRadius: "10px",
-        margin: "15px",
+        margin: "16px",
         backgroundColor: `${props.theme.backgroundColor.callScreenGrey}`,
         zIndex: zIndexValue,
         color: `${props.theme.color.white}`,
@@ -98,7 +100,7 @@ export const incomingCallWrapperStyle = (props, keyframes) => {
         boxSizing: "border-box",
         fontFamily: `${props.theme.fontFamily}`,
         animation: `${slideDown} 250ms ease`,
-        width: "250px",
+        width: "248px",
         "*": {
             boxSizing: "border-box",
             fontFamily: `${props.theme.fontFamily}`,
@@ -112,7 +114,7 @@ export const callContainerStyle = () => {
         display: "flex",
         flexDirection: "column",
         width: "100%",
-        padding: "15px",
+        padding: "16px",
     }
 }
 
@@ -196,48 +198,15 @@ export const ButtonStyle = (props, action) => {
     const backgroundColor = (action) ? `${props.theme.backgroundColor.blue}!important` : `${props.theme.backgroundColor.red}!important`;
 
     return {
-        cursor: "pointer",
-        padding: "6px 20px",
-        backgroundColor: backgroundColor,
-        borderRadius: "5px",
-        color: `${props.theme.color.white}`,
-        fontSize: "14px",
-        outline: "0",
-        border: "0",
-        width: "45%",
-        textOverflow: "ellipsis",
-        overflow: "hidden",
-    }
-}
-
-export const callScreenWrapperStyle = (props, keyframes) => {
-
-    const fadeAnimation = keyframes`
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }`;
-
-    return {
-        width: "100%",
-        height: "100%",
-        position: "absolute",
-        top: "0",
-        right: "0",
-        bottom: "0",
-        left: "0",
-        backgroundColor: `${props.theme.backgroundColor.darkGrey}`,
-        zIndex: "999",
-        color: `${props.theme.color.white}`,
-        textAlign: "center",
-        boxSizing: "border-box",
-        animation: `${fadeAnimation} 250ms ease`,
-        fontFamily: `${props.theme.fontFamily}`,
-        "*": {
-            boxSizing: "border-box",
-            fontFamily: `${props.theme.fontFamily}`,
-        },
-    }
+			cursor: "pointer",
+			padding: "8px 16px",
+			backgroundColor: backgroundColor,
+			borderRadius: "5px",
+			color: `${props.theme.color.white}`,
+			fontSize: "100%",
+			outline: "0",
+			border: "0",
+			width: "49%",
+			overflow: "hidden",
+		};
 }

@@ -7,19 +7,19 @@ import {
     backdropStyle
 } from "./style";
 
-const CometChatBackdrop = (props) => (
-    props.show ? <div css={backdropStyle()} className="modal__backdrop" onClick={props.clicked}></div> : null
-);
+const CometChatBackdrop = props => (props.show ? <div css={backdropStyle(props)} className="modal__backdrop" onClick={props.clicked}></div> : null);
 
 // Specifies the default values for props:
 CometChatBackdrop.defaultProps = {
-    count: 0,
-    clicked: () => {}
+	show: false,
+	style: {},
+	clicked: () => {},
 };
 
 CometChatBackdrop.propTypes = {
     show: PropTypes.bool,
+    style: PropTypes.object,
     clicked: PropTypes.func,
 }
 
-export default CometChatBackdrop;
+export { CometChatBackdrop };

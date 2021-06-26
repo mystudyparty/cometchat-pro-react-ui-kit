@@ -172,4 +172,4 @@ CometChatReceiverDocumentBubble.propTypes = {
     theme: PropTypes.object
 }
 
-export default CometChatReceiverDocumentBubble;
+export { CometChatReceiverDocumentBubble };

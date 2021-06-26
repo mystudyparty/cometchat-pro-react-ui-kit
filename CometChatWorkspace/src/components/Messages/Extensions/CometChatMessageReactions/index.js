@@ -8,7 +8,7 @@ import { CometChat } from "@cometchat-pro/chat";
 
 import { CometChatContext } from "../../../../util/CometChatContext";
 import * as enums from "../../../../util/enums.js";
-import { checkMessageForExtensionsData, validateWidgetSettings } from "../../../../util/common";
+import { checkMessageForExtensionsData } from "../../../../util/common";
 
 import { theme } from "../../../../resources/theme";
 import Translator from "../../../../resources/localization/translator";
@@ -50,23 +50,10 @@ class CometChatMessageReactions extends React.Component {
 
             // Reaction failed
             if (response.hasOwnProperty("success") === false || (response.hasOwnProperty("success") && response["success"] === false)) {
-                this.context.setToastMessage("error", "MESSAGE_REACTION_FAIL");
+                this.props.actionGenerated(enums.ACTIONS["ERROR"], [], "SOMETHING_WRONG");
             }
 
-        }).catch(error => {
-            
-            let errorCode = "ERROR";
-            if (error.hasOwnProperty("code")) {
-
-                errorCode = error.code;
-                if (error.code === enums.CONSTANTS.ERROR_CODES["ERR_CHAT_API_FAILURE"]
-                    && error.hasOwnProperty("details")
-                    && error.details.hasOwnProperty("code")) {
-                    errorCode = error.details.code;
-                }
-            }
-            this.context.setToastMessage("error", errorCode);
-        });
+        }).catch(error => this.props.actionGenerated(enums.ACTIONS["ERROR"], [], "SOMETHING_WRONG"));
     }
 
     triggerEmojiClick = (event) => {
@@ -128,22 +115,16 @@ class CometChatMessageReactions extends React.Component {
 
     addMessageReaction = () => {
 
-        //if message reactions are disabled in chat widget
-        if (validateWidgetSettings(this.props.widgetsettings, "allow_message_reactions") === false) {
+        //If reacting to messages feature is disabled
+        if (this.props.enableMessageReaction === false) {
             return null;
         }
 
         const addReactionEmoji = (
-            <div 
-            key="-1" 
-            css={messageReactionsStyle(this.props, {})} 
-            className="reaction reaction__add"
-            title={Translator.translate("ADD_REACTION", this.props.lang)}>
-                <button
-                type="button"
-                css={emojiButtonStyle(reactIcon)}
-                className="button__reacttomessage"
-                onClick={() => this.props.actionGenerated(enums.ACTIONS["REACT_TO_MESSAGE"], this.props.message)}><span></span></button>
+            <div key="-1" css={messageReactionsStyle(this.props, {})} className="reaction reaction__add" title={Translator.translate("ADD_REACTION", this.props.lang)}>
+                <button type="button" css={emojiButtonStyle(reactIcon)} className="button__reacttomessage" onClick={() => this.props.actionGenerated(enums.ACTIONS["REACT_TO_MESSAGE"], this.props.message)}>
+                    <span></span>
+                </button>
             </div>
         );
 
@@ -172,13 +153,15 @@ class CometChatMessageReactions extends React.Component {
 
 // Specifies the default values for props:
 CometChatMessageReactions.defaultProps = {
-    lang: Translator.getDefaultLanguage(),
-    theme: theme
+	lang: Translator.getDefaultLanguage(),
+	theme: theme,
+	enableMessageReaction: false,
 };
 
 CometChatMessageReactions.propTypes = {
-    lang: PropTypes.string,
-    theme: PropTypes.object
-}
+	lang: PropTypes.string,
+	theme: PropTypes.object,
+	enableMessageReaction: PropTypes.bool,
+};
 
-export default CometChatMessageReactions;
+export { CometChatMessageReactions };

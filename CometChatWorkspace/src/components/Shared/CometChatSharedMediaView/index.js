@@ -5,9 +5,10 @@ import { jsx } from "@emotion/core";
 import PropTypes from "prop-types";
 import { CometChat } from "@cometchat-pro/chat";
 
-import { SharedMediaManager } from "./controller";
 
 import { CometChatContext } from "../../../util/CometChatContext";
+
+import { SharedMediaManager } from "./controller";
 import * as enums from "../../../util/enums.js";
 
 import { theme } from "../../../resources/theme";
@@ -32,7 +33,7 @@ class CometChatSharedMediaView extends React.Component {
 
     constructor(props) {
         super(props);
-
+        this._isMounted = false;
         this.state = {
             messagetype: "image",
             messageList: []
@@ -52,6 +53,7 @@ class CometChatSharedMediaView extends React.Component {
 
     componentDidMount() {
 
+        this._isMounted = true;
         this.SharedMediaManager = new SharedMediaManager(this.context.item, this.context.type, this.state.messagetype);
         this.getMessages(true);
         this.SharedMediaManager.attachListeners(this.messageUpdated);
@@ -66,6 +68,12 @@ class CometChatSharedMediaView extends React.Component {
             this.getMessages(true);
             this.SharedMediaManager.attachListeners(this.messageUpdated);
         }
+    }
+
+    componentWillUnmount() {
+        this.SharedMediaManager.removeListeners();
+        this.SharedMediaManager = null;
+        this._isMounted = false;
     }
 
     //callback for listener functions
@@ -118,11 +126,13 @@ class CometChatSharedMediaView extends React.Component {
         this.SharedMediaManager.fetchPreviousMessages().then(messages => {
     
             const messageList = [...messages, ...this.state.messageList];
-            this.setState({ messageList: messageList });
+            if (this._isMounted) {
 
-            if(scrollToBottom) {
-                this.scrollToBottom();
-            }
+                this.setState({messageList: messageList});
+                if(scrollToBottom) {
+                    this.scrollToBottom();
+                }
+            } 
     
         }).catch(error => {
 
@@ -204,11 +214,6 @@ class CometChatSharedMediaView extends React.Component {
             </div>
         );
     }
-
-    componentWillUnmount() {
-      this.SharedMediaManager.removeListeners();
-      this.SharedMediaManager = null;
-    }
 }
 
 // Specifies the default values for props:
@@ -222,4 +227,4 @@ CometChatSharedMediaView.propTypes = {
     theme: PropTypes.object
 }
 
-export default CometChatSharedMediaView;
+export { CometChatSharedMediaView };
